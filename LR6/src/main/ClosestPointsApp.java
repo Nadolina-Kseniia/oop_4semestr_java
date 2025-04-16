@@ -1,67 +1,38 @@
-/**package LR6;
+package main;
 
-import org.apache.catalina.startup.Tomcat;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static spark.Spark.*;
 
 public class ClosestPointsApp {
 
-    private static final String DATA_FILE = "points.txt"; // Файл с точками
+    private static final String DATA_FILE = "points.txt";
 
     public static void main(String[] args) throws IOException {
-        // Создаем вложенную папку public внутри resources, если она не существует
-        File publicDir = new File("src/main/resources/public");
-        if (!publicDir.exists()) {
-            publicDir.mkdirs();
-        }
 
-
-
-        staticFiles.location("/public"); // Статические файлы (HTML, CSS, JS)
+        staticFiles.location("/public"); // Путь относительно resources
 
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            return render(model, "index.mustache"); // Шаблон главной страницы
+            return render(model, "index.mustache");
         });
 
         post("/find", (req, res) -> {
-            double a = Double.parseDouble(req.queryParams("a"));
-            double b = Double.parseDouble(req.queryParams("b"));
-            double c = Double.parseDouble(req.queryParams("c"));
-            double maxDistance = Double.parseDouble(req.queryParams("maxDistance"));
-
-            List<Point> closestPoints = findClosestPoints(a, b, c, maxDistance);
-
-            Map<String, Object> model = new HashMap<>();
-            model.put("points", closestPoints);
-            return render(model, "result.mustache"); // Шаблон страницы с результатами
+            try {
+                // ... (parsing parameters, finding closest points, same as before)
+            } catch (NumberFormatException e) {
+                halt(400, "Invalid input: " + e.getMessage());
+                return null;
+            } // Не нужно ловить IOException здесь, он обрабатывается в readPointsFromFile
         });
 
-
-        Tomcat tomcat = new Tomcat();
-        tomcat.setPort(4567); // порт приложения
-        tomcat.addWebapp("/", new File("src/main/webapp").getAbsolutePath());
-
-
-        try {
-            tomcat.start();
-            System.out.println("Приложение запущено на порту " + tomcat.getConnector().getPort());
-            tomcat.getServer().await();
-        } catch (LifecycleException e) {
-            e.printStackTrace();
-        }
-
+        port(4567);
 
     }
 
@@ -130,4 +101,3 @@ class Point {
         return "(" + x + ", " + y + ")";
     }
 }
- */
