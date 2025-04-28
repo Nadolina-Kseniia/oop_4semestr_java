@@ -6,11 +6,18 @@
       <list>
         <option value="$PROJECT_DIR$/LR6/pom.xml" />
         <option value="$PROJECT_DIR$/out/production/oop_4semestr/LR6/pom.xml" />
+        <option value="$PROJECT_DIR$/LR66/pom.xml" />
+        <option value="$PROJECT_DIR$/RGR/pom.xml" />
+        <option value="$PROJECT_DIR$/my-maven-project/pom.xml" />
+        <option value="$PROJECT_DIR$/ImageMerger/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/LR6/pom.xml" />
+        <option value="$PROJECT_DIR$/LR66/pom.xml" />
+        <option value="$PROJECT_DIR$/composite-image-app/pom.xml" />
+        <option value="$PROJECT_DIR$/my-maven-project/pom.xml" />
       </set>
     </option>
   </component>

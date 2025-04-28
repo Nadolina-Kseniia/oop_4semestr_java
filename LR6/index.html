@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Точки на плоскости</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 500px; margin: 0 auto; }
+        label { display: block; margin-top: 10px; }
+        input { width: 100%; padding: 8px; margin-top: 5px; }
+        button { margin-top: 20px; padding: 10px 15px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+<h1>Поиск точек близких к прямой</h1>
+<form action="/process" method="get">
+    <label for="A">Коэффициент A (Ax + By + C = 0):</label>
+    <input type="number" id="A" name="A" step="any" required value="1">
+
+    <label for="B">Коэффициент B (Ax + By + C = 0):</label>
+    <input type="number" id="B" name="B" step="any" required value="-1">
+
+    <label for="C">Коэффициент C (Ax + By + C = 0):</label>
+    <input type="number" id="C" name="C" step="any" required value="0">
+
+    <label for="distance">Максимальное расстояние от точки до прямой:</label>
+    <input type="number" id="distance" name="distance" step="any" min="0" required value="1">
+
+    <button type="submit">Найти точки</button>
+</form>
+</body>
+</html>

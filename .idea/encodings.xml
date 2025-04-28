@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/ImageMerger/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ImageMerger/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/LR66/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/LR66/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/composite-image-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/composite-image-app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/my-maven-project/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/my-maven-project/src/main/resources" charset="UTF-8" />
   </component>
 </project>
