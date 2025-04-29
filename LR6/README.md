@@ -25,7 +25,7 @@
    ```bash
    java PointServer
 4. Откройте в браузере:
-   http://localhost:8001
+   http://localhost:8081
 
 ## Как это работает
 1. Сервер при старте загружает точки из файла points.txt
