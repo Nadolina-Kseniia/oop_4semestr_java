@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ImageMerger/ImageMerger.iml" filepath="$PROJECT_DIR$/ImageMerger/ImageMerger.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/oop_4semestr.iml" filepath="$PROJECT_DIR$/.idea/oop_4semestr.iml" />
     </modules>
   </component>
