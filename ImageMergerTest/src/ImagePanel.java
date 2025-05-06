@@ -4,6 +4,16 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.io.*;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.awt.datatransfer.*;
+import java.awt.dnd.*;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.image.BufferedImage;
+import javax.swing.Timer;
 
 public class ImagePanel extends JPanel {
     private BufferedImage background;
@@ -15,10 +25,124 @@ public class ImagePanel extends JPanel {
     private transient Stack<List<DrawItem>> undoStack = new Stack<>();
     private transient Stack<List<DrawItem>> redoStack = new Stack<>();
 
+    private transient Stack<List<ImageItem>> undoStack = new Stack<>();
+    private transient Stack<List<ImageItem>> redoStack = new Stack<>();
+
+    public void pasteImageFromClipboard() {
+        try {
+            Transferable clipboardContent = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+            if (clipboardContent != null && clipboardContent.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                BufferedImage image = (BufferedImage) clipboardContent.getTransferData(DataFlavor.imageFlavor);
+                if (image != null) {
+                    Point center = new Point(getWidth() / 2, getHeight() / 2);
+                    addImage(image, center);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void saveState() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("autosave.dat"))) {
+            out.writeObject(items);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void loadState() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("autosave.dat"))) {
+            items = (List<ImageItem>) in.readObject();
+            repaint();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            redoStack.push(new ArrayList<>(items));
+            items.clear();
+            items.addAll(undoStack.pop());
+            repaint();
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            undoStack.push(new ArrayList<>(items));
+            items.clear();
+            items.addAll(redoStack.pop());
+            repaint();
+        }
+    }
+
+    private void initMouseListeners() {
+        MouseAdapter listener = new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    selectImage(e.getPoint());
+                    resizeDirection = ImageItem.ResizeDirection.NONE;
+                    if (selectedImage != null) {
+                        resizeDirection = selectedImage.getResizeDirection(e.getPoint());
+                        if (resizeDirection != ImageItem.ResizeDirection.NONE) {
+                            resizingItem = selectedImage;
+                        }
+                    }
+                    lastMousePoint = e.getPoint();
+                }
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                resizingItem = null;
+                selectedImage = null;
+                resizeDirection = ImageItem.ResizeDirection.NONE;
+            }
+
+            public boolean hasBackground() {
+                return background != null;
+            }
+
+            public boolean hasItems() {
+                return !items.isEmpty();
+            }
+
+            public void mouseDragged(MouseEvent e) {
+                if (resizingItem != null) {
+                    handleResize(e.getPoint());
+                    repaint();
+                } else if (selectedImage != null) {
+                    Point current = e.getPoint();
+                    int dx = current.x - lastMousePoint.x;
+                    int dy = current.y - lastMousePoint.y;
+                    selectedImage.move(dx, dy);
+                    lastMousePoint = current;
+                    repaint();
+                }
+            }
+        };
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
+    }
+
     public ImagePanel() {
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.WHITE);
         initMouseListeners();
+    }
+
+    private List<DrawItem> copyItems() {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(items);
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(bis);
+            return (List<DrawItem>) in.readObject();
+        } catch (Exception ex) {
+            return new ArrayList<>(items);
+        }
     }
 
     public void setKeepAspectRatio(boolean keep) { /* реализация */ }

@@ -1,10 +1,11 @@
 import java.awt.*;
 import java.io.Serializable;
 import java.util.*;
-import java.util.List;
 
 public class GroupItem implements DrawItem, Serializable {
     private List<DrawItem> members = new ArrayList<>();
+
+    public GroupItem() {} // Без параметров
 
     public void add(DrawItem item) {
         members.add(item);
@@ -31,7 +32,10 @@ public class GroupItem implements DrawItem, Serializable {
 
     @Override
     public boolean contains(Point point) {
-        return members.stream().anyMatch(item -> item.contains(point));
+        for (DrawItem item : members) {
+            if (item.contains(point)) return true;
+        }
+        return false;
     }
 
     @Override
@@ -51,10 +55,6 @@ public class GroupItem implements DrawItem, Serializable {
     @Override
     public void groupWith(List<DrawItem> items) {}
 
-    public List<DrawItem> getMembers() {
-        return new ArrayList<>(members);
-    }
-
     @Override
     public double getAspectRatio() {
         return 1.0;
@@ -71,4 +71,8 @@ public class GroupItem implements DrawItem, Serializable {
 
     @Override
     public int getHeight() { return 100; }
+
+    public List<DrawItem> getMembers() {
+        return new ArrayList<>(members);
+    }
 }
