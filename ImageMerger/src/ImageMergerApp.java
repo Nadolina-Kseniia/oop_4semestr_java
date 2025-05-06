@@ -127,7 +127,7 @@ public class ImageMergerApp extends JFrame {
 
     private void addImageToPanel(BufferedImage image, String filename) {
         // Scale image for preview
-        int previewWidth = 200;
+        int previewWidth = 800;
         int previewHeight = (int) ((double) image.getHeight() / image.getWidth() * previewWidth);
 
         Image scaledImage = image.getScaledInstance(previewWidth, previewHeight, Image.SCALE_SMOOTH);
